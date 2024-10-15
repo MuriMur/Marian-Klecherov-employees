@@ -13,7 +13,7 @@ public class Main {
         List<EmployeeData> employeeDataList = loadFileAndCreateList(csvFile);
 
         // Calculate the pair of employees who worked together the longest
-        Map<String, Long> employeePairTogether = new HashMap<>();
+        Map<String, Long> employeesIdsAndDaysMap = new HashMap<>();
         for (int i = 0; i < employeeDataList.size(); i++) {
             for (int j = i + 1; j < employeeDataList.size(); j++) {
                 EmployeeData employeeData1 = employeeDataList.get(i);
@@ -35,15 +35,21 @@ public class Main {
                     if (overlapStart.isBefore(overlapEnd)) {
                         long daysWorkedTogether = ChronoUnit.DAYS.between(overlapStart, overlapEnd);
                         String key = employeeData1.getEmpId() + ", " + employeeData2.getEmpId();
-                        employeePairTogether.put(key, employeePairTogether.getOrDefault(key, 0L) + daysWorkedTogether);
+                        employeesIdsAndDaysMap.put(key, employeesIdsAndDaysMap.getOrDefault(key, 0L) + daysWorkedTogether);
                     }
                 }
             }
         }
-        String maxPair = Collections.max(employeePairTogether.entrySet(), Map.Entry.comparingByValue()).getKey();
-        long maxDays = employeePairTogether.get(maxPair);
+        long maxDays = 0;
+        String idsOfMaxDaysPair = "";
+        for (Map.Entry<String, Long> empIdsDays : employeesIdsAndDaysMap.entrySet()) {
+            if (maxDays < empIdsDays.getValue()){
+                maxDays = empIdsDays.getValue();
+                idsOfMaxDaysPair = empIdsDays.getKey();
+            }
+        }
 
-        System.out.println(maxPair + ", " + maxDays);
+        System.out.println(idsOfMaxDaysPair + ", " + maxDays);
     }
     private static List<EmployeeData> loadFileAndCreateList(String csvFile) {
         String line = "";
