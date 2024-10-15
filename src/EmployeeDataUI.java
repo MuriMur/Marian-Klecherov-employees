@@ -15,40 +15,35 @@ import java.util.List;
 public class EmployeeDataUI {
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Employee Project Tracker");
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame jFrame = new JFrame("Employee Project Tracker");
+        jFrame.setSize(1000, 800);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+        JPanel jPanel = new JPanel();
+        jPanel.setLayout(new BorderLayout());
 
-        JLabel fileLabel = new JLabel("No file selected.");
-        panel.add(fileLabel, BorderLayout.NORTH);
+        String[] columnNames = {"Employee Id", "Employee Id", "Project Id", "Days"};
+        JTable jTable = new JTable(new Object[][]{}, columnNames);
+        jPanel.add(new JScrollPane(jTable), BorderLayout.CENTER);
 
-        String[] columnNames = {"Employee ID #1", "Employee ID #2", "Project ID", "Days Worked"};
-        JTable table = new JTable(new Object[][]{}, columnNames);
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
-
-        JButton selectFileButton = new JButton("Select CSV File");
-        panel.add(selectFileButton, BorderLayout.SOUTH);
-
-        selectFileButton.addActionListener(new ActionListener() {
+        JButton selectCsvFile = new JButton("Select CSV File");
+        jPanel.add(selectCsvFile, BorderLayout.NORTH);
+        selectCsvFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showOpenDialog(null);
+                JFileChooser jFileChooser = new JFileChooser();
+                int result = jFileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    fileLabel.setText("Selected file: " + selectedFile.getAbsolutePath());
+                    File selectedFile = jFileChooser.getSelectedFile();
                     List<EmployeeData> employeeDataList = loadFileAndCreateList(selectedFile.getAbsolutePath());
                     List<Object[]> tableData = findAndFillTableData(employeeDataList);
-                    fillTableWithData(table, tableData);
+                    fillTableWithData(jTable, tableData);
                 }
             }
         });
 
-        frame.add(panel);
-        frame.setVisible(true);
+        jFrame.add(jPanel);
+        jFrame.setVisible(true);
     }
     private static List<EmployeeData> loadFileAndCreateList(String csvFile) {
         List<EmployeeData> employeeDataList = new ArrayList<>();
@@ -108,9 +103,8 @@ public class EmployeeDataUI {
     }
 
     private static void fillTableWithData(JTable table, List<Object[]> tableData) {
-        String[] columnNames = {"Employee ID #1", "Employee ID #2", "Project ID", "Days Worked"};
+        String[] columnNames = {"Employee Id", "Employee Id", "Project Id", "Days"};
         Object[][] dataArray = new Object[tableData.size()][columnNames.length];
-
         for (int i = 0; i < tableData.size(); i++) {
             dataArray[i] = tableData.get(i);
         }
