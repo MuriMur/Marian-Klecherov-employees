@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
@@ -49,7 +50,13 @@ public class EmployeeDataUI {
         List<EmployeeData> employeeDataList = new ArrayList<>();
         String line = "";
         String splitBy = ",";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[yyyy-MM-dd][MM/dd/yyyy]");
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .appendOptional(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+                .toFormatter();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {

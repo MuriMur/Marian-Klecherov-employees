@@ -3,12 +3,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
         String csvFile = "D:\\sirmaSolutions.csv"; // Path to your CSV file
         List<EmployeeData> employeeDataList = loadFileAndCreateList(csvFile);
 
@@ -54,7 +54,13 @@ public class Main {
     private static List<EmployeeData> loadFileAndCreateList(String csvFile) {
         String line = "";
         String splitBy = ",";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[yyyy-MM-dd][MM/dd/yyyy]");
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .appendOptional(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+                .toFormatter();
         List<EmployeeData> employeeDataList = new ArrayList<>();
         try
         {
