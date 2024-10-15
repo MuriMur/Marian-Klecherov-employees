@@ -32,7 +32,7 @@ public class Main {
                     } else{
                         overlapEnd = employeeData2.getDateTo();
                     }
-                    if (!overlapStart.isAfter(overlapEnd)) {
+                    if (overlapStart.isBefore(overlapEnd)) {
                         long daysWorkedTogether = ChronoUnit.DAYS.between(overlapStart, overlapEnd);
                         String key = employeeData1.getEmpId() + ", " + employeeData2.getEmpId();
                         employeePairTogether.put(key, employeePairTogether.getOrDefault(key, 0L) + daysWorkedTogether);
